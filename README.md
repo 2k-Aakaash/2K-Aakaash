@@ -5,7 +5,7 @@ Welcome to my professional portfolio repository! This portfolio showcases my ski
 ## Technologies Used 🚀
 
 - ReactJS
-- CSS3 (including Flexbox and Grid)
+- CSS3
 - SCSS
 - JavaScript (ES6+)
 - Figma
@@ -17,5 +17,4 @@ Welcome to my professional portfolio repository! This portfolio showcases my ski
 - Git
 - Lighthouse
 - Netlify
-- Vercel
-- 
+- Vercel 
