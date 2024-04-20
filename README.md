@@ -6,8 +6,16 @@ Welcome to my professional portfolio repository! This portfolio showcases my ski
 
 - ReactJS
 - CSS3 (including Flexbox and Grid)
+- SCSS
 - JavaScript (ES6+)
+- Figma
 - Lenis
 - Locomotive
 - GSAP
+- Webpack
+- Babel
 - Git
+- Lighthouse
+- Netlify
+- Vercel
+- 
