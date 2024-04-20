@@ -96,7 +96,13 @@ sub {
 
 img {
     border: 0;
-}
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    -webkit-user-drag: none;
+}  
 
 svg:not(:root) {
     overflow: hidden;
@@ -3064,6 +3070,13 @@ html.w-mod-js [data-ix="new-interaction"] {
     transform: translate(0);
 }
 
+.iweb-redirect{
+    text-decoration: none;
+    color: #fff;
+}
+
+
+
 @media screen and (min-width: 1280px) {
     .container {
         margin-bottom: 0%;
@@ -3329,11 +3342,12 @@ html.w-mod-js [data-ix="new-interaction"] {
         display: flex;
     }
     .image-6 {
-        width: 75vw;
+        width: 80vw;
         margin-left: -10%;
     }
     .image-6.sprintora-image {
-        margin-left: -20%;
+        margin-left: -25%;
+        width: 110vw;
     }
     .heading-6 {
         font-size: 14vw;
