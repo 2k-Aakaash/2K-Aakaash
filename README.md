@@ -15,6 +15,7 @@ Welcome to my professional portfolio repository! This portfolio showcases my ski
 - Webpack
 - Babel
 - Git
+- GitHub
 - Lighthouse
 - Netlify
 - Vercel 
