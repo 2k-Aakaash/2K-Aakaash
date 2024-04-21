@@ -5,6 +5,7 @@ Discover 2K Aakaash a Professional Front-End Web Developer and UI/UX Designer. H
 ## Technologies ⚡
 
 - ReactJS
+- Semantic HTML
 - CSS3
 - SCSS
 - JavaScript (ES6+)
