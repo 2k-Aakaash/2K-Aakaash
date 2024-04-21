@@ -18,4 +18,5 @@ Welcome to my professional portfolio repository! This portfolio showcases my ski
 - GitHub
 - Lighthouse
 - Netlify
-- Vercel 
+- Vercel
+- Firebase
