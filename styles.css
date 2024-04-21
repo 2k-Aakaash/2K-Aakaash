@@ -2301,6 +2301,7 @@ textarea.w-select {
     justify-content: space-between;
     align-items: center;
     padding: 30px 39px 30px 40px;
+    margin-top: 20px;
 }
 
 .text-block {
@@ -2510,7 +2511,7 @@ textarea.w-select {
     font-family: Foundersgrotesk, sans-serif;
     font-size: 28px;
     font-weight: 500;
-    line-height: 26px;
+    line-height: 30px;
 }
 
 .paragraph-4.ui-text {
@@ -2746,6 +2747,7 @@ textarea.w-select {
     justify-content: center;
     align-items: center;
     display: flex;
+    width: 102%;
 }
 
 .div-block-7 {
@@ -3189,6 +3191,7 @@ html.w-mod-js [data-ix="new-interaction"] {
     .container {
         padding-top: 30%;
         padding-bottom: 0%;
+        margin-left: 3%;
     }
     .heading-2 {
         font-size: 7vw;
@@ -3200,6 +3203,7 @@ html.w-mod-js [data-ix="new-interaction"] {
     }
     .flex-block-2 {
         margin-top: 0;
+        margin-left: 3%;
     }
     .paragraph {
         margin-left: 0;
@@ -3258,8 +3262,8 @@ html.w-mod-js [data-ix="new-interaction"] {
         margin-left: -10%;
     }
     .image-6.sprintora-image {
-        margin-left: -25%;
-        width: 110vw;
+        margin-left: -15%;
+        width: 80vw;
     }
     .heading-6 {
         font-size: 14vw;
@@ -3344,6 +3348,66 @@ html.w-mod-js [data-ix="new-interaction"] {
     }
 }
 
+@media screen and (max-height: 870px){
+    .text-block-2{
+        top: 50%;
+    }
+}
+
+@media screen and (max-width: 640px){
+    .text-block-2{
+        top: 55%;
+    }
+}
+
+@media screen and (max-width: 600px){
+    .text-block-2{
+        top: 53%;
+    }
+}
+
+@media screen and (max-width: 500px){
+    .text-block-2{
+        top: 47%;
+    }
+}
+
+@media screen and (max-width: 480px) and (min-width: 470px){
+    .text-block-2{
+        top: 63%;
+    }
+}
+
+
+@media screen and (max-width: 470px){
+    .text-block-2{
+        top: 63%;
+    }
+}
+
+@media screen and (max-width: 460px){
+    .text-block-2{
+        top: 60%;
+    }
+}
+
+@media screen and (max-width: 430px){
+    .text-block-2{
+        top: 59%;
+    }
+}
+
+@media screen and (max-width: 390px){
+    .text-block-2{
+        top: 57%;
+    }
+}
+
+@media screen and (max-width: 340px){
+    .text-block-2{
+        top: 51%;
+    }
+}
 #w-node-_66aa687d-3d61-5cb3-70a4-601b44dc2cb6-c1184b71 {
     grid-template-rows: auto;
     grid-template-columns: 1fr 1fr 1fr;
