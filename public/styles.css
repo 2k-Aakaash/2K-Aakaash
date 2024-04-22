@@ -2899,7 +2899,7 @@ textarea.w-select {
 }
 
 .paragraph-6 {
-    color: #fff !important;
+    color: #fff;
     margin-top: -20px;
     margin-bottom: 0;
     font-family: Foundersgrotesk, sans-serif;
@@ -3106,7 +3106,7 @@ html.w-mod-js [data-ix="new-interaction"] {
         object-fit: cover;
     }
     .paragraph-6 {
-        color: #fff !important;
+        color: #fff;
         font-weight: 400;
     }
     .paragraph-7 {
@@ -3376,26 +3376,6 @@ html.w-mod-js [data-ix="new-interaction"] {
     .text-block-2{
         top: 63%;
     }
-}
-
-@media screen and (max-width: 479px) and (min-width: 340px){
-    .flex-block-6{
-        margin-right: 45px;
-    }
-
-    .link{
-        padding-right: 90px;
-    }
-
-    .link-2{
-        padding-right: 65px;
-    }
-
-    .link-3{
-        padding-right: 52px;
-    }
-
-    
 }
 
 
