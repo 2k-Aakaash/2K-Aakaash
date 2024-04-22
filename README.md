@@ -1,10 +1,11 @@
-# Professional Portfolio 🚀
+# 2K Aakaash the UI UX Mastery 🚀
 
-Welcome to my professional portfolio repository! This portfolio showcases my skills and projects as a front-end developer and UI/UX designer.
+Discover 2K Aakaash a Professional Front-End Web Developer and UI/UX Designer. Here you'll find awesome repositories built by me. One of them are Popular by people who loves it. Reach my Portfolio below this for contact and information.
 
-## Technologies Used ⚡
+## Technologies ⚡
 
 - ReactJS
+- Semantic HTML
 - CSS3
 - SCSS
 - JavaScript (ES6+)
@@ -18,4 +19,6 @@ Welcome to my professional portfolio repository! This portfolio showcases my ski
 - GitHub
 - Lighthouse
 - Netlify
-- Vercel 
+- Vercel
+- Firebase
+- and many more!
