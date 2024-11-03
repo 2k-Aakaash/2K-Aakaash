@@ -1,4 +1,4 @@
-# 2K Aakaash the UI UX Mastery 🚀
+# 2K Aakaash the UI UX Mastery <img src="https://ik.imagekit.io/026k2i7ys/catcoding.gif?updatedAt=1730640001526" alt="Aakaash coding cat" width="40">
 
 Discover 2K Aakaash a Professional Front-End Web Developer and UI/UX Designer. Here you'll find awesome repositories built by me. One of them are Popular by people who loves it. Reach my Portfolio below this for contact and information.
 
