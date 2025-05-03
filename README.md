@@ -4,7 +4,7 @@ Discover 2K Aakaash a Professional Front-End Web Developer and UI/UX Designer. H
 
 *[Portfolio Link!](https://2k-aakaash.vercel.app/)*
 
-**Popular Projects** => *[iWeb](https://www.github.com/2k-Aakaash/iWeb/)* | *[Sprintora](https://www.github.com/2k-Aakaash/Test-Sprintora/)*
+**Popular Projects** => *[iWeb](https://www.github.com/2k-Aakaash/iWeb/)* | *[Sprintora](https://www.github.com/2k-Aakaash/Sprintora/) * | *[Diskette](https://www.github.com/Diskette)*
 
 ## Technologies ⚡
 
