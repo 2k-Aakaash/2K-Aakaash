@@ -64,3 +64,8 @@ node_modules/
 
 # dotenv environment variables file
 .env
+
+# Astro
+dist/
+.astro/
+.vercel/

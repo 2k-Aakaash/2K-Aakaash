@@ -1,0 +1,69 @@
+---
+import '@fontsource-variable/unbounded';
+import '@fontsource-variable/manrope';
+import '@fontsource-variable/jetbrains-mono';
+import '../styles/global.css';
+import { PROFILE } from '../content/profile.js';
+
+const {
+  title = `${PROFILE.name} — ${PROFILE.role}`,
+  description = `${PROFILE.headline} Based in ${PROFILE.location}.`,
+  jsonLd = [],
+  intro = false,
+} = Astro.props;
+
+const path = Astro.url.pathname.replace(/(index)?\.html$/, '').replace(/\/$/, '');
+const canonical = new URL(path || '/', PROFILE.url).href;
+const ogImage = new URL('/og.jpg', PROFILE.url).href;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#05060b" />
+    <meta name="author" content={PROFILE.brand} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={PROFILE.brand} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/icon-256.svg" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    {jsonLd.map((data: object) => <script type="application/ld+json" set:html={JSON.stringify(data)} />)}
+
+    {intro && (
+      /* Decide before first paint whether the opening sequence plays, so nothing flashes. */
+      <script is:inline>
+        (function () {
+          try {
+            var motion = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (motion && !location.hash && (window.scrollY || 0) < 40) {
+              document.documentElement.classList.add('is-intro');
+              if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+            }
+          } catch (e) {}
+        })();
+      </script>
+    )}
+  </head>
+  <body>
+    <slot />
+
+  </body>
+</html>

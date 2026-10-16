@@ -1,0 +1,330 @@
+---
+import { getImage, Picture } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import { PROFILE, SECTIONS } from '../content/profile.js';
+import { PROJECTS, ARCHIVE } from '../content/projects.js';
+import { SKILL_GROUPS } from '../content/skills.js';
+import { MILESTONES } from '../content/journey.js';
+
+const assets = import.meta.glob<{ default: ImageMetadata }>('../assets/*.{png,jpg,webp}', { eager: true });
+const assetFor = (name?: string) => (name ? (assets[`../assets/${name}.png`] ?? assets[`../assets/${name}.jpg`])?.default : undefined);
+
+// Smaller WebP copies for the 3D textures.
+const images: Record<string, string> = {};
+for (const project of PROJECTS) {
+  const src = assetFor(project.image);
+  if (src) images[project.id] = (await getImage({ src, format: 'webp', width: 1280, quality: 78 })).src;
+}
+
+const section = Object.fromEntries(SECTIONS.map((s, i) => [s.id, { ...s, n: String(i + 1).padStart(2, '0') }]));
+const nameChars = [...PROFILE.name];
+const monthFmt = new Intl.DateTimeFormat('en', { month: 'short', year: 'numeric' });
+const fmt = (ym: string) => monthFmt.format(new Date(`${ym}-01T00:00:00Z`));
+
+const worldData = {
+  projects: PROJECTS.map(({ id, artifact, mood }) => ({ id, artifact, mood })),
+  skillGroups: SKILL_GROUPS,
+  milestoneCount: MILESTONES.length + PROFILE.experience.length,
+  images,
+};
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: PROFILE.name,
+    alternateName: PROFILE.brand,
+    jobTitle: PROFILE.role,
+    url: PROFILE.url,
+    email: `mailto:${PROFILE.email}`,
+    address: { '@type': 'PostalAddress', addressRegion: 'Tamil Nadu', addressCountry: 'IN' },
+    sameAs: PROFILE.socials.map((s) => s.href),
+    knowsAbout: SKILL_GROUPS.flatMap((g) => g.skills.filter((s) => s.evidence === 'shipped').map((s) => s.name)),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Selected work',
+    itemListElement: PROJECTS.map((p, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      item: {
+        '@type': 'CreativeWork',
+        name: p.name,
+        description: p.summary,
+        url: p.links[0]?.href,
+        author: { '@type': 'Person', name: PROFILE.name },
+      },
+    })),
+  },
+];
+
+const arrow = '<svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 12 12 4M6 4h6v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+---
+<Base jsonLd={jsonLd} intro>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="world" data-world aria-hidden="true"></div>
+  <div class="scrim" aria-hidden="true"></div>
+  <div class="hud-fade" aria-hidden="true"></div>
+
+  <div class="intro" data-intro aria-hidden="true">
+    <p class="intro-line" data-intro-line>{PROFILE.brand} · Observatory</p>
+    <p class="intro-status" data-intro-status></p>
+  </div>
+  <button class="btn btn-quiet intro-skip" type="button" data-intro-skip>Skip intro</button>
+
+  <header class="hud-top">
+    <a class="wordmark" href="#home" aria-label={`${PROFILE.brand}, back to the top`}>
+      <img src="/2k.svg" alt="" width="40" height="40" />
+      <span>{PROFILE.name}</span>
+    </a>
+    <div class="hud-actions">
+      <a class="btn btn-quiet hud-book" href={PROFILE.booking} target="_blank" rel="noopener">Book a call</a>
+      <button class="btn btn-quiet menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="nav-rail">Menu</button>
+    </div>
+  </header>
+
+  <nav class="nav-rail" id="nav-rail" aria-label="Sections">
+    <ol>
+      {SECTIONS.map((s) => (
+        <li><a href={`#${s.id}`} data-nav aria-current={s.id === 'home' ? 'true' : 'false'}><span>{s.label}</span></a></li>
+      ))}
+    </ol>
+  </nav>
+
+  <div class="locator" aria-hidden="true">
+    <span><span data-locator-index>01</span> / {String(SECTIONS.length).padStart(2, '0')} · <strong data-locator-sector>{SECTIONS[0].sector}</strong></span>
+    <div class="locator-bar"><i data-locator-bar></i></div>
+  </div>
+
+  <div class="sound" data-sound data-on="false" hidden>
+    <div class="sound-panel" id="sound-panel" data-sound-panel hidden role="group" aria-labelledby="sound-title">
+      <h2 id="sound-title">Sound</h2>
+      <div class="sound-row">
+        <label for="sound-volume">Volume</label>
+        <input id="sound-volume" type="range" min="0" max="100" step="1" value="60" data-sound-volume />
+      </div>
+      <div class="sound-row">
+        <label for="sound-ambient">Ambience</label>
+        <input id="sound-ambient" type="checkbox" checked data-sound-ambient />
+      </div>
+      <div class="sound-row">
+        <label for="sound-interaction">Interface sounds</label>
+        <input id="sound-interaction" type="checkbox" checked data-sound-interaction />
+      </div>
+      <p class="sound-note">Generated live in your browser. <span data-sound-output>Stereo, spatialised for headphones</span>.</p>
+    </div>
+    <div class="hud-actions">
+      <button class="btn btn-quiet" type="button" data-sound-more aria-expanded="false" aria-controls="sound-panel" aria-label="Sound settings">
+        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 5h10M3 11h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="6" cy="5" r="1.6" fill="currentColor"/><circle cx="10" cy="11" r="1.6" fill="currentColor"/></svg>
+      </button>
+      <button class="btn btn-quiet sound-toggle" type="button" data-sound-toggle aria-pressed="false">
+        <span class="sound-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span data-sound-text>Sound</span>
+        <span class="sound-state" aria-hidden="true" data-sound-state>off</span>
+      </button>
+    </div>
+  </div>
+
+  <main id="main">
+    <!-- 01 · Home -->
+    <section id="home" class="region hero" data-section data-station="home" data-label={section.home.label} data-sector={section.home.sector} aria-labelledby="hero-title">
+      <div class="region-inner" data-reveal-scope>
+        <p class="label" data-reveal><span class="idx">{section.home.n}</span> {PROFILE.role}</p>
+        <h1 id="hero-title" class="display h-name" aria-label={PROFILE.name} tabindex="-1">
+          {nameChars.map((c) => <span class="ch" data-hero-ch aria-hidden="true">{c}</span>)}
+        </h1>
+        <p class="lead" data-reveal>{PROFILE.headline}</p>
+        <div class="actions" data-reveal>
+          <a class="btn btn-solar" href="#work">Explore the work</a>
+          <a class="btn" href="#contact">Get in touch</a>
+        </div>
+        <div class="hero-meta" data-reveal>
+          {PROFILE.available && <p class="status"><i aria-hidden="true"></i> Open for new projects</p>}
+          <ul class="socials" aria-label="Profiles">
+            {PROFILE.socials.slice(0, 2).map((s) => <li><a href={s.href} target="_blank" rel="noopener">{s.label}</a></li>)}
+          </ul>
+        </div>
+      </div>
+      <p class="scroll-hint" aria-hidden="true">Scroll to explore</p>
+    </section>
+
+    <!-- 02 · About -->
+    <section id="about" class="region" data-section data-station="about" data-label={section.about.label} data-sector={section.about.sector} aria-labelledby="about-title">
+      <div class="region-inner" data-reveal-scope>
+        <p class="label" data-reveal><span class="idx">{section.about.n}</span> About</p>
+        <h2 id="about-title" class="display h-section" data-reveal>Design and code, seen through one lens.</h2>
+        <div class="prose" style="margin-top: 28px">
+          {PROFILE.about.map((p) => <p data-reveal>{p}</p>)}
+        </div>
+        <div class="services">
+          {PROFILE.services.map((s) => (
+            <div class="service" data-reveal>
+              <h3>{s.title}</h3>
+              <p>{s.text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 · Work -->
+    <section id="work" data-section data-label={section.work.label} data-sector={section.work.sector} aria-labelledby="work-title">
+      <div class="region work-head" data-station="work">
+        <div class="region-inner" data-reveal-scope>
+          <p class="label" data-reveal><span class="idx">{section.work.n}</span> Selected work</p>
+          <h2 id="work-title" class="display h-section" data-reveal>Five things I built, each in its own orbit.</h2>
+          <p class="lead" data-reveal>Every project is an object you can visit. Scroll to fly between them, or open a case file for the full story.</p>
+        </div>
+      </div>
+
+      {PROJECTS.map((p, i) => (
+        <article id={`project-${p.id}`} class="region station project" data-station={`project:${p.id}`} aria-labelledby={`p-${p.id}`}>
+          <div class="region-inner" data-reveal-scope>
+            <span class="project-index" data-reveal>{String(i + 1).padStart(2, '0')} / {String(PROJECTS.length).padStart(2, '0')}</span>
+            <h3 id={`p-${p.id}`} class="display h-project" data-reveal>{p.name}</h3>
+            <p class="project-kind" data-reveal>{p.kind}</p>
+            <p class="lead" data-reveal>{p.summary}</p>
+            <ul class="chips" aria-label="Technology" data-reveal>
+              {p.stack.slice(0, 6).map((t) => <li class="chip">{t}</li>)}
+            </ul>
+            <div class="actions" data-reveal>
+              <button class="btn btn-solar" type="button" data-open-case={p.id} aria-haspopup="dialog">Open case file</button>
+              {p.links.slice(0, 2).map((l) => (
+                <a class="btn" href={l.href} target="_blank" rel="noopener">{l.label} <Fragment set:html={arrow} /></a>
+              ))}
+            </div>
+          </div>
+        </article>
+      ))}
+
+      <div class="region" style="min-height: 0; padding-top: 40px; padding-bottom: 60px">
+        <div class="region-inner" data-reveal-scope>
+          <h3 class="label" data-reveal>Also in the archive</h3>
+          <ul class="contact-list" style="margin-top: 0">
+            {ARCHIVE.map((a) => (
+              <li data-reveal><a href={a.href} target="_blank" rel="noopener"><span>{a.note}</span><strong>{a.name}</strong></a></li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 · Skills -->
+    <section id="skills" class="region region-wide" data-section data-station="skills" data-label={section.skills.label} data-sector={section.skills.sector} aria-labelledby="skills-title">
+      <div class="region-inner" data-reveal-scope>
+        <p class="label" data-reveal><span class="idx">{section.skills.n}</span> Skills</p>
+        <h2 id="skills-title" class="display h-section" data-reveal style="max-width: 14ch">A constellation of tools.</h2>
+        <p class="lead" data-reveal>Grouped by what they do. Point at one to find its star.</p>
+        <div class="skill-groups">
+          {SKILL_GROUPS.map((g) => (
+            <div class="skill-group" data-skill-group={g.id} data-reveal>
+              <h3>{g.title}</h3>
+              <ul class="chips">
+                {g.skills.map((s) => (
+                  <li class="chip" tabindex="0" data-skill={`${g.id}:${s.name}`} data-evidence={s.evidence}>{s.name}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+        <p class="skill-legend" data-reveal>Bright stars are tools used in the projects above; dimmer ones are part of my wider toolkit.</p>
+      </div>
+    </section>
+
+    <!-- 05 · Journey -->
+    <section id="journey" class="region" data-section data-station="journey" data-label={section.journey.label} data-sector={section.journey.sector} aria-labelledby="journey-title">
+      <div class="region-inner" data-reveal-scope>
+        <p class="label" data-reveal><span class="idx">{section.journey.n}</span> Journey</p>
+        <h2 id="journey-title" class="display h-section" data-reveal>From a homepage to an observatory.</h2>
+        <ol class="timeline">
+          {PROFILE.experience.map((role) => (
+            <li class="milestone" data-reveal>
+              <time datetime={role.start}>{fmt(role.start)} – {role.end ? fmt(role.end) : 'Present'}</time>
+              <h3>{role.title} · {role.company}</h3>
+              <p>{role.summary}</p>
+            </li>
+          ))}
+          {MILESTONES.map((m) => (
+            <li class="milestone" data-reveal>
+              <time datetime={m.date}>{fmt(m.date)}</time>
+              <h3>{m.title}</h3>
+              <p>{m.text}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <!-- 06 · Contact -->
+    <section id="contact" class="region contact" data-section data-station="contact" data-label={section.contact.label} data-sector={section.contact.sector} aria-labelledby="contact-title">
+      <div class="region-inner" data-reveal-scope>
+        <p class="label" data-reveal><span class="idx">{section.contact.n}</span> Contact</p>
+        <h2 id="contact-title" class="display h-section" data-reveal>Up for a chat?<br />Let’s talk.</h2>
+        <p class="lead" data-reveal>Tell me about the product, the brand or the idea. I reply to every message.</p>
+        <div class="actions" data-reveal>
+          <a class="btn btn-solar" href={`mailto:${PROFILE.email}?subject=${encodeURIComponent('Hello Aakaash')}`}>Email me</a>
+          <a class="btn" href={PROFILE.booking} target="_blank" rel="noopener">Book a 15-minute call</a>
+          {PROFILE.resume && <a class="btn" href={PROFILE.resume} download>Download résumé</a>}
+        </div>
+        <ul class="contact-list">
+          <li data-reveal><a href={`mailto:${PROFILE.email}`}><span>Email</span><strong>{PROFILE.email}</strong></a></li>
+          <li data-reveal><a href={`tel:${PROFILE.phone}`}><span>Phone</span><strong>{PROFILE.phone.replace(/^(\+91)(\d{5})(\d{5})$/, '$1 $2 $3')}</strong></a></li>
+          {PROFILE.socials.map((s) => (
+            <li data-reveal><a href={s.href} target="_blank" rel="noopener"><span>{s.label}</span><strong>{s.handle}</strong></a></li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© {new Date().getFullYear()} {PROFILE.name} · {PROFILE.location}</p>
+    <p>Designed & built by {PROFILE.brand}. The world is rendered live with Three.js.</p>
+  </footer>
+
+  {PROJECTS.map((p) => {
+    const image = assetFor(p.image);
+    return (
+      <dialog class="case" data-case={p.id} aria-labelledby={`case-${p.id}`}>
+        <div class="case-scroll">
+          <button class="btn btn-quiet case-close" type="button" data-case-close>Close</button>
+          <p class="label">{p.kind}</p>
+          <h2 id={`case-${p.id}`} class="display h-project">{p.name}</h2>
+          <p class="lead" style="max-width: 52ch">{p.summary}</p>
+          {image && (
+            <div class="case-media">
+              <Picture src={image} alt={p.imageAlt ?? ''} formats={['avif', 'webp']} widths={[640, 960, 1400]} sizes="(min-width: 900px) 820px, 100vw" loading="lazy" />
+            </div>
+          )}
+          <div class="case-grid">
+            <div><h3>The problem</h3><p>{p.problem}</p></div>
+            <div><h3>My role</h3><p>{p.role}</p></div>
+          </div>
+          <div class="case-grid">
+            <div><h3>Key features</h3><ul>{p.features.map((f) => <li>{f}</li>)}</ul></div>
+            <div><h3>Technical challenges</h3><ul>{p.challenges.map((c) => <li>{c}</li>)}</ul></div>
+          </div>
+          {p.outcomes.length > 0 && (
+            <div class="case-grid"><div><h3>Outcomes</h3><ul>{p.outcomes.map((o) => <li>{o}</li>)}</ul></div></div>
+          )}
+          <div class="case-grid">
+            <div>
+              <h3>Stack</h3>
+              <ul class="chips">{p.stack.map((t) => <li class="chip">{t}</li>)}</ul>
+            </div>
+          </div>
+          <div class="actions">
+            {p.links.map((l) => <a class="btn" href={l.href} target="_blank" rel="noopener">{l.label} <Fragment set:html={arrow} /></a>)}
+          </div>
+        </div>
+      </dialog>
+    );
+  })}
+
+  <script type="application/json" id="world-data" set:html={JSON.stringify(worldData)} />
+  <script>
+    import '../scripts/main.js';
+  </script>
+</Base>

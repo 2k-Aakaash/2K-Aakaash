@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://2k-aakaash.vercel.app/sitemap-index.xml

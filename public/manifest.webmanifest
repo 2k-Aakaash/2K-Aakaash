@@ -1,0 +1,12 @@
+{
+  "name": "2K Aakaash",
+  "short_name": "Aakaash",
+  "icons": [
+    { "src": "/icon-256.svg", "sizes": "256x256", "type": "image/svg+xml" },
+    { "src": "/2k.svg", "sizes": "512x512", "type": "image/svg+xml" }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#05060b",
+  "background_color": "#05060b"
+}
